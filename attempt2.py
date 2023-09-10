@@ -55,15 +55,20 @@ def adjust_least_significant_bit(image_array, binary_string):
             pixel = list(image_array[i][j])
             if not pixel[0].endswith(binary_string[k]):
                 pixel[0][len(pixel) - 1] = binary_string[k]
-                k += 1
+                if k + 1 < len(binary_string):
+                    k += 1
 
             if not pixel[1].endswith(binary_string[k]):
                 pixel[1][len(pixel) - 1] = binary_string[k]
                 k += 1
+                if k + 1 < len(binary_string):
+                    k += 1
 
             if not pixel[2].endswith(binary_string[k]):
                 pixel[2][len(pixel) - 1] = binary_string[k]
                 k += 1
+                if k + 1 < len(binary_string):
+                    k += 1
 
             image_array[i][j] = tuple(pixel)
 
