@@ -37,18 +37,42 @@ def convert_decimal_to_binary(decimal_in):
 
 
 def convert_decimal_array_to_binary(image_array):
-    for row in image_array:
-        for pixel in row:
-            pixel = list(pixel)
+    for i in range(len(image_array)):
+        for j in range(len(image_array[i])):
+            pixel = list(image_array[i][j])
             pixel[0] = convert_decimal_to_binary(pixel[0])
             pixel[1] = convert_decimal_to_binary(pixel[1])
             pixel[2] = convert_decimal_to_binary(pixel[2])
-            pixel = tuple(pixel)
+            image_array[i][j] = tuple(pixel)
+
+    return image_array
+
+def adjust_least_significant_bit(image_array, binary_string):
+    ##### ADD IN BOUNDS CHECK ON THE SIZE OF K #####
+    k = 0
+    for i in range(len(image_array)):
+        for j in range(len(image_array[i])):
+            pixel = list(image_array[i][j])
+            if not pixel[0].endswith(binary_string[k]):
+                pixel[0][len(pixel) - 1] = binary_string[k]
+                k += 1
+
+            if not pixel[1].endswith(binary_string[k]):
+                pixel[1][len(pixel) - 1] = binary_string[k]
+                k += 1
+
+            if not pixel[2].endswith(binary_string[k]):
+                pixel[2][len(pixel) - 1] = binary_string[k]
+                k += 1
+
+            image_array[i][j] = tuple(pixel)
 
     return image_array
 
 
+
 rgb_array_2d_decimal = convert_image_to_array('elon.jpeg')
 rgb_array_2d_binary = convert_decimal_array_to_binary(rgb_array_2d_decimal)
+
 
 print(rgb_array_2d_binary)
