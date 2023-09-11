@@ -47,27 +47,49 @@ def convert_decimal_array_to_binary(image_array):
 
     return image_array
 
+
+def convert_string_to_binary_string(text):
+    binary_string = ''
+    for character in text:
+        binary_string += format(ord(character), '08b')
+    return binary_string
+
+
 def adjust_least_significant_bit(image_array, binary_string):
     ##### ADD IN BOUNDS CHECK ON THE SIZE OF K #####
     k = 0
+    pixel_count = 0
     for i in range(len(image_array)):
         for j in range(len(image_array[i])):
             pixel = list(image_array[i][j])
+            print("K is: ")
+            print(k)
+            print("pixel count is: ")
+            print(pixel_count)
+            pixel_count += 1
+
             if not pixel[0].endswith(binary_string[k]):
-                pixel[0][len(pixel) - 1] = binary_string[k]
-                if k + 1 < len(binary_string):
+                red = pixel[0]
+                red = list(red)
+                red[len(red) - 1] = binary_string[k]
+                pixel[0] = ''.join(red)
+                if k < (len(binary_string) - 1):
                     k += 1
 
             if not pixel[1].endswith(binary_string[k]):
-                pixel[1][len(pixel) - 1] = binary_string[k]
-                k += 1
-                if k + 1 < len(binary_string):
+                green = pixel[1]
+                green = list(green)
+                green[len(green) - 1] = binary_string[k]
+                pixel[1] = ''.join(green)
+                if k < (len(binary_string) - 1):
                     k += 1
 
             if not pixel[2].endswith(binary_string[k]):
-                pixel[2][len(pixel) - 1] = binary_string[k]
-                k += 1
-                if k + 1 < len(binary_string):
+                blue = pixel[2]
+                blue = list(blue)
+                blue[len(blue) - 1] = binary_string[k]
+                pixel[2] = ''.join(blue)
+                if k < (len(binary_string) - 1):
                     k += 1
 
             image_array[i][j] = tuple(pixel)
@@ -78,6 +100,10 @@ def adjust_least_significant_bit(image_array, binary_string):
 
 rgb_array_2d_decimal = convert_image_to_array('elon.jpeg')
 rgb_array_2d_binary = convert_decimal_array_to_binary(rgb_array_2d_decimal)
+print(rgb_array_2d_binary)
 
+binary_string = convert_string_to_binary_string('Hello, world!')
+print(binary_string)
 
+rgb_array_2d_binary = adjust_least_significant_bit(rgb_array_2d_binary, binary_string)
 print(rgb_array_2d_binary)
