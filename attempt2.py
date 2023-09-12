@@ -104,40 +104,39 @@ def adjust_least_significant_bit(image_array, binary_string):
 
     for i in range(len(image_array)):
         for j in range(len(image_array[i])):
+            if k >= len(binary_string):  # Exit if we've embedded all bits
+                return image_array
+
             pixel = list(image_array[i][j])
-            print("K is: ")
-            print(k)
-            print("pixel count is: ")
-            print(pixel_count)
-            pixel_count += 1
 
-            if not pixel[0].endswith(binary_string[k]):
-                red = pixel[0]
-                red = list(red)
-                red[len(red) - 1] = binary_string[k]
-                pixel[0] = ''.join(red)
-                if k < (len(binary_string) - 1):
-                    k += 1
+            # Adjusting the LSB for the red channel
+            red = list(pixel[0])
+            red[-1] = binary_string[k]
+            pixel[0] = ''.join(red)
+            k += 1
 
-            if not pixel[1].endswith(binary_string[k]):
-                green = pixel[1]
-                green = list(green)
-                green[len(green) - 1] = binary_string[k]
-                pixel[1] = ''.join(green)
-                if k < (len(binary_string) - 1):
-                    k += 1
+            if k >= len(binary_string):  # Check again after every channel
+                return image_array
 
-            if not pixel[2].endswith(binary_string[k]):
-                blue = pixel[2]
-                blue = list(blue)
-                blue[len(blue) - 1] = binary_string[k]
-                pixel[2] = ''.join(blue)
-                if k < (len(binary_string) - 1):
-                    k += 1
+            # Adjusting the LSB for the green channel
+            green = list(pixel[1])
+            green[-1] = binary_string[k]
+            pixel[1] = ''.join(green)
+            k += 1
+
+            if k >= len(binary_string):  # And again
+                return image_array
+
+            # Adjusting the LSB for the blue channel
+            blue = list(pixel[2])
+            blue[-1] = binary_string[k]
+            pixel[2] = ''.join(blue)
+            k += 1
 
             image_array[i][j] = tuple(pixel)
 
     return image_array
+
 
 
 def get_least_significant_bits(image_array):
@@ -165,8 +164,8 @@ def encode_text_in_image():
     with open('hamlet.txt', 'r') as file:
         content = file.read()
 
-    print(content)  # This will print the contents of the file
-    time.sleep(1)
+    # print(content)  # This will print the contents of the file
+    # time.sleep(1)
 
     binary_string = convert_string_to_binary_string(content)
     print(binary_string)
@@ -184,48 +183,28 @@ def encode_text_in_image():
     img_new.save('test.png')
 
 
-def decode_text_from_image():
-    print("decoding...")
-    rgb_array_2d_decimal = convert_image_to_array('test.png')
+def decode_text_from_image(image_filename):
+    # Convert the image to an array of pixel values
+    rgb_array_2d_decimal = convert_image_to_array(image_filename)
     rgb_array_2d_binary = convert_decimal_array_to_binary(rgb_array_2d_decimal)
+
+    # Extract the least significant bits to get our encoded binary string
     decoded_bits = get_least_significant_bits(rgb_array_2d_binary)
 
-    binary_characters = []
-    character = []
-    for bit in decoded_bits:
-        character.append(bit)
-        if len(character) == 8:  # if we have 8 bits
-            binary_characters.append(character)  # append the 8-bit character to the list
-            character = []  # reset for the next character
+    # Group bits by 8 to create bytes
+    binary_strings = [''.join(decoded_bits[i:i + 8]) for i in range(0, len(decoded_bits), 8)]
 
-    decoded_message = []
-    for char_bin in binary_characters:
-        if char_bin == '11111111':  # Termination sequence
+    decoded_text = []
+    for binary_string in binary_strings:
+        if binary_string == '11111111':  # termination sequence
             break
-        decoded_message.append(convert_8_bit_binary_to_character(''.join(char_bin)))
+        char = chr(int(binary_string, 2))
+        decoded_text.append(char)
 
-    # If there are leftover bits that didn't form a full 8-bit character
-    if character:
-        binary_characters.append(character)
-
-    text_characters = []
-    print(binary_characters)
-
-    # print(text_characters)
-
-    for character in binary_characters:
-        text_characters.append(convert_8_bit_binary_to_character(''.join(character)))
-
-    print(text_characters)
-
-    with open('decoded.txt', 'w') as file:
-        file.write(''.join(text_characters))
-
-    # read LSB of each color value of each pixel and add to array of arrays of 8 bits each
-    # one array of 8 bits for each character
+    return ''.join(decoded_text)
 
 
-# encode_text_in_image()
-# decode_text_from_image()
+encode_text_in_image()
+decoded_text = decode_text_from_image('test.png')
+print(decoded_text)
 
-print(convert_8_bit_binary_to_character('0110100001100111'))
