@@ -94,7 +94,6 @@ def convert_string_to_binary_string(text):
     return binary_string
 
 
-
 def adjust_least_significant_bit(image_array, binary_string):
     k = 0
     pixel_count = 0
@@ -136,7 +135,6 @@ def adjust_least_significant_bit(image_array, binary_string):
             image_array[i][j] = tuple(pixel)
 
     return image_array
-
 
 
 def get_least_significant_bits(image_array):
@@ -207,4 +205,3 @@ def decode_text_from_image(image_filename):
 encode_text_in_image()
 decoded_text = decode_text_from_image('test.png')
 print(decoded_text)
-
