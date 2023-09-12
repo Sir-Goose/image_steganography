@@ -1,3 +1,5 @@
+import time
+
 from PIL import Image
 
 
@@ -88,13 +90,18 @@ def convert_string_to_binary_string(text):
     binary_string = ''
     for character in text:
         binary_string += format(ord(character), '08b')
+    binary_string += '11111111'  # Termination sequence
     return binary_string
 
 
+
 def adjust_least_significant_bit(image_array, binary_string):
-    ##### ADD IN BOUNDS CHECK ON THE SIZE OF K #####
     k = 0
     pixel_count = 0
+
+    if len(binary_string) > len(image_array) * len(image_array[0]) * 3:  # 3 for RGB
+        raise ValueError("Message is too long to be encoded in this image!")
+
     for i in range(len(image_array)):
         for j in range(len(image_array[i])):
             pixel = list(image_array[i][j])
@@ -132,6 +139,7 @@ def adjust_least_significant_bit(image_array, binary_string):
 
     return image_array
 
+
 def get_least_significant_bits(image_array):
     decoded_bits = []
     for i in range(len(image_array)):
@@ -142,10 +150,10 @@ def get_least_significant_bits(image_array):
             decoded_bits.append(pixel[2][len(pixel[2]) - 1])
     return decoded_bits
 
+
 def convert_8_bit_binary_to_character(binary_string):
     character = chr(int(binary_string, 2))
     return character
-
 
 
 def encode_text_in_image():
@@ -158,9 +166,11 @@ def encode_text_in_image():
         content = file.read()
 
     print(content)  # This will print the contents of the file
+    time.sleep(1)
 
     binary_string = convert_string_to_binary_string(content)
     print(binary_string)
+    time.sleep(1)
 
     rgb_array_2d_binary = adjust_least_significant_bit(rgb_array_2d_binary, binary_string)
     print(rgb_array_2d_binary)
@@ -173,6 +183,7 @@ def encode_text_in_image():
     img_new = convert_array_to_image(rgb_array_2d_decimal)
     img_new.save('test.png')
 
+
 def decode_text_from_image():
     print("decoding...")
     rgb_array_2d_decimal = convert_image_to_array('test.png')
@@ -180,46 +191,41 @@ def decode_text_from_image():
     decoded_bits = get_least_significant_bits(rgb_array_2d_binary)
 
     binary_characters = []
-    for bit in range(len(decoded_bits)):
-        if bit % 8 == 0:
-            binary_characters.append(decoded_bits[bit:bit+8])
+    character = []
+    for bit in decoded_bits:
+        character.append(bit)
+        if len(character) == 8:  # if we have 8 bits
+            binary_characters.append(character)  # append the 8-bit character to the list
+            character = []  # reset for the next character
 
+    decoded_message = []
+    for char_bin in binary_characters:
+        if char_bin == '11111111':  # Termination sequence
+            break
+        decoded_message.append(convert_8_bit_binary_to_character(''.join(char_bin)))
+
+    # If there are leftover bits that didn't form a full 8-bit character
+    if character:
+        binary_characters.append(character)
 
     text_characters = []
-    for character in binary_characters:
-        text_characters.append(convert_8_bit_binary_to_character(''.join(character)))
+    print(binary_characters)
 
     # print(text_characters)
 
-    with open('output.txt', 'w') as f:
-        f.write(''.join(text_characters))
+    for character in binary_characters:
+        text_characters.append(convert_8_bit_binary_to_character(''.join(character)))
 
+    print(text_characters)
 
-
-
-
+    with open('decoded.txt', 'w') as file:
+        file.write(''.join(text_characters))
 
     # read LSB of each color value of each pixel and add to array of arrays of 8 bits each
     # one array of 8 bits for each character
 
-encode_text_in_image()
-decode_text_from_image()
 
+# encode_text_in_image()
+# decode_text_from_image()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+print(convert_8_bit_binary_to_character('0110100001100111'))
