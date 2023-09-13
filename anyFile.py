@@ -75,5 +75,5 @@ def decode_file_from_image(image_filename, output_filename):
     binary_to_file(raw_bytes, output_filename)
 
 
-encode_file_in_image('aaaaa.jpg', 'elon.jpeg')
-decode_file_from_image('test.png', 'bbbbb.png')
+encode_file_in_image('cat.png', 'elon.jpeg')
+decode_file_from_image('test.png', 'cat2.png')
