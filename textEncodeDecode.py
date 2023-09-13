@@ -17,7 +17,7 @@ def decode_text_from_image(image_filename):
     rgb_array_2d_binary = EncodeDecode.convert_decimal_array_to_binary(rgb_array_2d_decimal)
 
     # Extract the least significant bits to get our encoded binary string
-    decoded_bits = EncodeDecode.get_least_significant_bits(rgb_array_2d_binary)
+    decoded_bits = EncodeDecode.get_least_significant_bits_text(rgb_array_2d_binary)
 
     # Group bits by 8 to create bytes
     binary_strings = [''.join(decoded_bits[i:i + 8]) for i in range(0, len(decoded_bits), 8)]
@@ -32,8 +32,8 @@ def decode_text_from_image(image_filename):
     return ''.join(decoded_text)
 
 
-def encode_text_in_image(text):
-    rgb_array_2d_decimal = EncodeDecode.convert_image_to_array('elon.jpeg')
+def encode_text_in_image(text, image_filename):
+    rgb_array_2d_decimal = EncodeDecode.convert_image_to_array(image_filename)
     rgb_array_2d_binary = EncodeDecode.convert_decimal_array_to_binary(rgb_array_2d_decimal)
     print(rgb_array_2d_binary)
 
@@ -58,6 +58,6 @@ def encode_text_in_image(text):
 with open('hamlet.txt', 'r') as file:
     content = file.read()
 
-encode_text_in_image(content)
+encode_text_in_image(content, 'elon.jpeg')
 decoded_text = decode_text_from_image('test.png')
 print(decoded_text)

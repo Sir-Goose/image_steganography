@@ -89,7 +89,7 @@ def adjust_least_significant_bit(image_array, binary_string):
     pixel_count = 0
 
     if len(binary_string) > len(image_array) * len(image_array[0]) * 3:  # 3 for RGB
-        raise ValueError("Message is too long to be encoded in this image!")
+        raise ValueError("File is too big to be encoded in this image!")
 
     for i in range(len(image_array)):
         for j in range(len(image_array[i])):
@@ -127,7 +127,7 @@ def adjust_least_significant_bit(image_array, binary_string):
     return image_array
 
 
-def get_least_significant_bits(image_array):
+def get_least_significant_bits_text(image_array):
     decoded_bits = []
     for i in range(len(image_array)):
         for j in range(len(image_array[i])):
@@ -138,9 +138,12 @@ def get_least_significant_bits(image_array):
     return decoded_bits
 
 
-
-
-
-
-
-
+def get_least_significant_bits_any(image_array):
+    decoded_bits = []
+    for i in range(len(image_array)):
+        for j in range(len(image_array[i])):
+            pixel = list(image_array[i][j])
+            decoded_bits.append(pixel[0][len(pixel[0]) - 1])
+            decoded_bits.append(pixel[1][len(pixel[1]) - 1])
+            decoded_bits.append(pixel[2][len(pixel[2]) - 1])
+    return ''.join(decoded_bits)  # Convert the list to a string
