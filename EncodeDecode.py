@@ -1,5 +1,3 @@
-import time
-
 from PIL import Image
 
 
@@ -86,14 +84,6 @@ def convert_binary_array_to_decimal(image_array):
     return image_array
 
 
-def convert_string_to_binary_string(text):
-    binary_string = ''
-    for character in text:
-        binary_string += format(ord(character), '08b')
-    binary_string += '11111111'  # Termination sequence
-    return binary_string
-
-
 def adjust_least_significant_bit(image_array, binary_string):
     k = 0
     pixel_count = 0
@@ -148,60 +138,9 @@ def get_least_significant_bits(image_array):
     return decoded_bits
 
 
-def convert_8_bit_binary_to_character(binary_string):
-    character = chr(int(binary_string, 2))
-    return character
 
 
-def encode_text_in_image():
-    rgb_array_2d_decimal = convert_image_to_array('elon.jpeg')
-    rgb_array_2d_binary = convert_decimal_array_to_binary(rgb_array_2d_decimal)
-    print(rgb_array_2d_binary)
-
-    # Open the file for reading
-    with open('hamlet.txt', 'r') as file:
-        content = file.read()
-
-    # print(content)  # This will print the contents of the file
-    # time.sleep(1)
-
-    binary_string = convert_string_to_binary_string(content)
-    print(binary_string)
-    time.sleep(1)
-
-    rgb_array_2d_binary = adjust_least_significant_bit(rgb_array_2d_binary, binary_string)
-    print(rgb_array_2d_binary)
-
-    # convert image back to decimal array
-    rgb_array_2d_decimal = convert_binary_array_to_decimal(rgb_array_2d_binary)
-    # print(rgb_array_2d_decimal)
-
-    # convert decimal array to image
-    img_new = convert_array_to_image(rgb_array_2d_decimal)
-    img_new.save('test.png')
 
 
-def decode_text_from_image(image_filename):
-    # Convert the image to an array of pixel values
-    rgb_array_2d_decimal = convert_image_to_array(image_filename)
-    rgb_array_2d_binary = convert_decimal_array_to_binary(rgb_array_2d_decimal)
-
-    # Extract the least significant bits to get our encoded binary string
-    decoded_bits = get_least_significant_bits(rgb_array_2d_binary)
-
-    # Group bits by 8 to create bytes
-    binary_strings = [''.join(decoded_bits[i:i + 8]) for i in range(0, len(decoded_bits), 8)]
-
-    decoded_text = []
-    for binary_string in binary_strings:
-        if binary_string == '11111111':  # termination sequence
-            break
-        char = chr(int(binary_string, 2))
-        decoded_text.append(char)
-
-    return ''.join(decoded_text)
 
 
-encode_text_in_image()
-decoded_text = decode_text_from_image('test.png')
-print(decoded_text)
