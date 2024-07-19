@@ -50,8 +50,8 @@ def convert_array_to_image(rgb_array_2d):
     return img_new
 
 
-def convert_decimal_to_binary(decimal_in):
-    binary_out = format(decimal_in, '08b')
+def convert_int_to_binary(int_in):
+    binary_out = format(int_in, '08b')
     return binary_out
 
 
@@ -64,9 +64,9 @@ def convert_decimal_array_to_binary(image_array):
     for i in range(len(image_array)):
         for j in range(len(image_array[i])):
             pixel = list(image_array[i][j])
-            pixel[0] = convert_decimal_to_binary(pixel[0])
-            pixel[1] = convert_decimal_to_binary(pixel[1])
-            pixel[2] = convert_decimal_to_binary(pixel[2])
+            pixel[0] = convert_int_to_binary(pixel[0])
+            pixel[1] = convert_int_to_binary(pixel[1])
+            pixel[2] = convert_int_to_binary(pixel[2])
             image_array[i][j] = tuple(pixel)
 
     return image_array

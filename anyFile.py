@@ -31,10 +31,10 @@ def binary_to_file(binary_data, output_filename):
 
 def encode_file_in_image(file_name, image_filename):
     print("Converting image to array")
-    rgb_array_2d_decimal = EncodeDecode.convert_image_to_array(image_filename)
+    rgb_array_2d_int = EncodeDecode.convert_image_to_array(image_filename)
 
     print("Converting array to binary")
-    rgb_array_2d_binary = EncodeDecode.convert_decimal_array_to_binary(rgb_array_2d_decimal)
+    rgb_array_2d_binary = EncodeDecode.convert_decimal_array_to_binary(rgb_array_2d_int)
 
     print("Converting file to binary")
     # Convert file to binary
@@ -55,7 +55,7 @@ def encode_file_in_image(file_name, image_filename):
 
     print("Converting decimal array back to image")
     img_new = EncodeDecode.convert_array_to_image(rgb_array_2d_decimal)
-    img_new.save('test.png')
+    img_new.save(image_filename)
 
 
 def decode_file_from_image(image_filename, output_filename):
