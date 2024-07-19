@@ -1,4 +1,5 @@
 import EncodeDecode
+import sys
 
 
 def bytes_to_bit_string(binary_data):
@@ -74,6 +75,25 @@ def decode_file_from_image(image_filename, output_filename):
     raw_bytes = bit_string_to_bytes(decoded_bits)
     binary_to_file(raw_bytes, output_filename)
 
+def encode(file_in, image_out):
+    ...
+def decode(image_in, file_out):
+    ...
 
-encode_file_in_image('cat.png', 'elon.jpeg')
-decode_file_from_image('test.png', 'cat2.png')
+if __name__ == "__main__":
+    # command line arguments
+    # encode into image:
+    # python3 anyFile.py encode file_in image_out
+    # decond out of image
+    # python3 anyfile.py decode image_in file_out
+
+    if sys.argv[1] == 'encode':
+        encode(file_in=sys.argv[2], image_out=sys.argv[3])
+    elif sys.argv[1] == 'decode':
+        decode(image_in=sys.argv[2], file_out=sys.argv[3])
+
+
+
+
+    encode_file_in_image('cat.png', 'elon.jpeg')
+    decode_file_from_image('test.png', 'cat2.png')
