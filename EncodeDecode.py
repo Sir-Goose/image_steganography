@@ -1,7 +1,7 @@
 from PIL import Image
+from typing import List, Tuple
 
-
-def convert_image_to_array(image_in):
+def convert_image_to_array(image_in: str) -> List[List[Tuple[int, int, int]]]:
     # Open the image using PIL
     img = Image.open(image_in)
 
@@ -12,11 +12,11 @@ def convert_image_to_array(image_in):
     width, height = img.size
 
     # Create a 2D array to store the RGB values of each pixel
-    rgb_array_2d = []
+    rgb_array_2d: List[List[Tuple[int, int, int]]] = []
 
     # Loop through each row
     for y in range(height):
-        row = []
+        row: List[Tuple[int, int, int]] = []
         for x in range(width):
             # Get RGB values of each pixel
             r, g, b = img.getpixel((x, y))
@@ -29,8 +29,7 @@ def convert_image_to_array(image_in):
 
     return rgb_array_2d
 
-
-def convert_array_to_image(rgb_array_2d):
+def convert_array_to_image(rgb_array_2d: List[List[Tuple[int, int, int]]]) -> Image.Image:
     # Determine the dimensions of the 2D array
     height = len(rgb_array_2d)
     width = len(rgb_array_2d[0])
@@ -49,18 +48,15 @@ def convert_array_to_image(rgb_array_2d):
 
     return img_new
 
-
-def convert_int_to_binary(int_in):
+def convert_int_to_binary(int_in: int) -> str:
     binary_out = format(int_in, '08b')
     return binary_out
 
-
-def convert_binary_to_decimal(binary_in):
+def convert_binary_to_decimal(binary_in: str) -> int:
     decimal_out = int(binary_in, 2)
     return decimal_out
 
-
-def convert_decimal_array_to_binary(image_array):
+def convert_decimal_array_to_binary(image_array: List[List[Tuple[int, int, int]]]) -> List[List[Tuple[str, str, str]]]:
     for i in range(len(image_array)):
         for j in range(len(image_array[i])):
             pixel = list(image_array[i][j])
@@ -71,8 +67,7 @@ def convert_decimal_array_to_binary(image_array):
 
     return image_array
 
-
-def convert_binary_array_to_decimal(image_array):
+def convert_binary_array_to_decimal(image_array: List[List[Tuple[str, str, str]]]) -> List[List[Tuple[int, int, int]]]:
     for i in range(len(image_array)):
         for j in range(len(image_array[i])):
             pixel = list(image_array[i][j])
@@ -83,8 +78,7 @@ def convert_binary_array_to_decimal(image_array):
 
     return image_array
 
-
-def adjust_least_significant_bit(image_array, binary_string):
+def adjust_least_significant_bit(image_array: List[List[Tuple[str, str, str]]], binary_string: str) -> List[List[Tuple[str, str, str]]]:
     k = 0
     pixel_count = 0
 
@@ -126,8 +120,7 @@ def adjust_least_significant_bit(image_array, binary_string):
 
     return image_array
 
-
-def get_least_significant_bits_text(image_array):
+def get_least_significant_bits_text(image_array: List[List[Tuple[str, str, str]]]) -> List[str]:
     decoded_bits = []
     for i in range(len(image_array)):
         for j in range(len(image_array[i])):
@@ -137,8 +130,7 @@ def get_least_significant_bits_text(image_array):
             decoded_bits.append(pixel[2][len(pixel[2]) - 1])
     return decoded_bits
 
-
-def get_least_significant_bits_any(image_array):
+def get_least_significant_bits_any(image_array: List[List[Tuple[str, str, str]]]) -> str:
     decoded_bits = []
     for i in range(len(image_array)):
         for j in range(len(image_array[i])):

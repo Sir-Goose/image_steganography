@@ -1,13 +1,12 @@
 import EncodeDecode
 import sys
+from typing import List, Tuple
 
-
-def bytes_to_bit_string(binary_data):
+def bytes_to_bit_string(binary_data: bytes) -> str:
     # Convert a bytes object to a string of bits
     return ''.join(f'{byte:08b}' for byte in binary_data)
 
-
-def bit_string_to_bytes(bit_string):
+def bit_string_to_bytes(bit_string: str) -> bytes:
     # Convert a string of 1s and 0s to a bytes object.
     if not isinstance(bit_string, str):
         raise TypeError("Expected a string of 1s and 0s")
@@ -15,21 +14,18 @@ def bit_string_to_bytes(bit_string):
         raise ValueError("The bit string length must be a multiple of 8")
     return bytes(int(bit_string[i:i + 8], 2) for i in range(0, len(bit_string), 8))
 
-
-def file_to_binary(filename):
+def file_to_binary(filename: str) -> bytes:
     # Convert a file to its binary representation.
     with open(filename, 'rb') as file:
         binary_data = file.read()
     return binary_data
 
-
-def binary_to_file(binary_data, output_filename):
+def binary_to_file(binary_data: bytes, output_filename: str) -> None:
     # Write binary data to a file.
     with open(output_filename, 'wb') as file:
         file.write(binary_data)
 
-
-def encode_file_in_image(file_name, image_filename):
+def encode_file_in_image(file_name: str, image_filename: str) -> None:
     print("Converting image to array")
     rgb_array_2d_int = EncodeDecode.convert_image_to_array(image_filename)
 
@@ -57,8 +53,7 @@ def encode_file_in_image(file_name, image_filename):
     img_new = EncodeDecode.convert_array_to_image(rgb_array_2d_decimal)
     img_new.save(image_filename)
 
-
-def decode_file_from_image(image_filename, output_filename):
+def decode_file_from_image(image_filename: str, output_filename: str) -> None:
     # Convert the image to an array of pixel values
     rgb_array_2d_decimal = EncodeDecode.convert_image_to_array(image_filename)
     rgb_array_2d_binary = EncodeDecode.convert_decimal_array_to_binary(rgb_array_2d_decimal)
@@ -75,10 +70,10 @@ def decode_file_from_image(image_filename, output_filename):
     raw_bytes = bit_string_to_bytes(decoded_bits)
     binary_to_file(raw_bytes, output_filename)
 
-def encode(file_in, image_out):
+def encode(file_in: str, image_out: str) -> None:
     encode_file_in_image(file_in, image_out)
 
-def decode(image_in, file_out):
+def decode(image_in: str, file_out: str) -> None:
     decode_file_from_image(image_in, file_out)
 
 if __name__ == "__main__":
