@@ -76,9 +76,10 @@ def decode_file_from_image(image_filename, output_filename):
     binary_to_file(raw_bytes, output_filename)
 
 def encode(file_in, image_out):
-    ...
+    encode_file_in_image(file_in, image_out)
+
 def decode(image_in, file_out):
-    ...
+    decode_file_from_image(image_in, file_out)
 
 if __name__ == "__main__":
     # command line arguments
@@ -86,14 +87,13 @@ if __name__ == "__main__":
     # python3 anyFile.py encode file_in image_out
     # decond out of image
     # python3 anyfile.py decode image_in file_out
+    if len(sys.argv) != 4:
+        raise ValueError("Incorrect number of arguments. Usage: python3 anyFile.py [encode|decode] input_file output_file")
+
+    if sys.argv[1] not in ['encode', 'decode']:
+        raise ValueError("First argument must be either 'encode' or 'decode'")
 
     if sys.argv[1] == 'encode':
         encode(file_in=sys.argv[2], image_out=sys.argv[3])
     elif sys.argv[1] == 'decode':
         decode(image_in=sys.argv[2], file_out=sys.argv[3])
-
-
-
-
-    encode_file_in_image('cat.png', 'elon.jpeg')
-    decode_file_from_image('test.png', 'cat2.png')
