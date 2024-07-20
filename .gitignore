@@ -2,3 +2,5 @@
 .venv
 .DS_Store
 pyrightconfig.json
+__pycache__
+message.txt
