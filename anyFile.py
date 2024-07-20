@@ -1,6 +1,15 @@
 import EncodeDecode
 import sys
 from typing import List, Tuple
+from PIL import Image
+
+def check_png(filename: str) -> None:
+    try:
+        with Image.open(filename) as img:
+            if img.format != 'PNG':
+                raise ValueError(f"The image file {filename} is not a PNG. Only PNG images are supported.")
+    except IOError:
+        raise ValueError(f"Unable to open the image file {filename}. Please ensure it's a valid PNG image.")
 
 def bytes_to_bit_string(binary_data: bytes) -> str:
     # Convert a bytes object to a string of bits
@@ -26,6 +35,7 @@ def binary_to_file(binary_data: bytes, output_filename: str) -> None:
         file.write(binary_data)
 
 def encode_file_in_image(file_name: str, image_filename: str) -> None:
+    check_png(image_filename)
     print("Converting image to array")
     rgb_array_2d_int = EncodeDecode.convert_image_to_array(image_filename)
 
@@ -51,9 +61,10 @@ def encode_file_in_image(file_name: str, image_filename: str) -> None:
 
     print("Converting decimal array back to image")
     img_new = EncodeDecode.convert_array_to_image(rgb_array_2d_decimal)
-    img_new.save(image_filename)
+    img_new.save(image_filename, format='PNG')
 
 def decode_file_from_image(image_filename: str, output_filename: str) -> None:
+    check_png(image_filename)
     # Convert the image to an array of pixel values
     rgb_array_2d_decimal = EncodeDecode.convert_image_to_array(image_filename)
     rgb_array_2d_binary = EncodeDecode.convert_decimal_array_to_binary(rgb_array_2d_decimal)
@@ -80,7 +91,7 @@ if __name__ == "__main__":
     # command line arguments
     # encode into image:
     # python3 anyFile.py encode file_in image_out
-    # decond out of image
+    # decode out of image
     # python3 anyfile.py decode image_in file_out
     if len(sys.argv) != 4:
         raise ValueError("Incorrect number of arguments. Usage: python3 anyFile.py [encode|decode] input_file output_file")
