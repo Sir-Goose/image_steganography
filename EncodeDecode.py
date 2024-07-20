@@ -57,26 +57,34 @@ def convert_binary_to_decimal(binary_in: str) -> int:
     return decimal_out
 
 def convert_decimal_array_to_binary(image_array: List[List[Tuple[int, int, int]]]) -> List[List[Tuple[str, str, str]]]:
-    for i in range(len(image_array)):
-        for j in range(len(image_array[i])):
-            pixel = list(image_array[i][j])
-            pixel[0] = convert_int_to_binary(pixel[0])
-            pixel[1] = convert_int_to_binary(pixel[1])
-            pixel[2] = convert_int_to_binary(pixel[2])
-            image_array[i][j] = tuple(pixel)
-
-    return image_array
+    result: List[List[Tuple[str, str, str]]] = []
+    for row in image_array:
+        new_row: List[Tuple[str, str, str]] = []
+        for pixel in row:
+            r, g, b = pixel
+            new_pixel = (
+                convert_int_to_binary(r),
+                convert_int_to_binary(g),
+                convert_int_to_binary(b)
+            )
+            new_row.append(new_pixel)
+        result.append(new_row)
+    return result
 
 def convert_binary_array_to_decimal(image_array: List[List[Tuple[str, str, str]]]) -> List[List[Tuple[int, int, int]]]:
-    for i in range(len(image_array)):
-        for j in range(len(image_array[i])):
-            pixel = list(image_array[i][j])
-            pixel[0] = convert_binary_to_decimal(pixel[0])
-            pixel[1] = convert_binary_to_decimal(pixel[1])
-            pixel[2] = convert_binary_to_decimal(pixel[2])
-            image_array[i][j] = tuple(pixel)
-
-    return image_array
+    result: List[List[Tuple[int, int, int]]] = []
+    for row in image_array:
+        new_row: List[Tuple[int, int, int]] = []
+        for pixel in row:
+            r, g, b = pixel
+            new_pixel = (
+                convert_binary_to_decimal(r),
+                convert_binary_to_decimal(g),
+                convert_binary_to_decimal(b)
+            )
+            new_row.append(new_pixel)
+        result.append(new_row)
+    return result
 
 def adjust_least_significant_bit(image_array: List[List[Tuple[str, str, str]]], binary_string: str) -> List[List[Tuple[str, str, str]]]:
     k = 0
