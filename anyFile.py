@@ -65,10 +65,13 @@ def encode_file_in_image(file_name: str, image_filename: str) -> None:
 
 def decode_file_from_image(image_filename: str, output_filename: str) -> None:
     check_png(image_filename)
+    print("Converting image to array")
     # Convert the image to an array of pixel values
     rgb_array_2d_decimal = EncodeDecode.convert_image_to_array(image_filename)
+    print("Converting array to binary")
     rgb_array_2d_binary = EncodeDecode.convert_decimal_array_to_binary(rgb_array_2d_decimal)
 
+    print("Extracting least significant bits")
     # Extract the least significant bits to get our encoded binary string
     decoded_bits = EncodeDecode.get_least_significant_bits_any(rgb_array_2d_binary)
 
@@ -77,8 +80,9 @@ def decode_file_from_image(image_filename: str, output_filename: str) -> None:
 
     # Trim the decoded_bits to only contain the original message
     decoded_bits = decoded_bits[32:32 + original_length]
-
+    print("Constructing bytes from decoded bits")
     raw_bytes = bit_string_to_bytes(decoded_bits)
+    print("Building file from bytes")
     binary_to_file(raw_bytes, output_filename)
 
 def encode(file_in: str, image_out: str) -> None:
